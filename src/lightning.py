@@ -10,10 +10,15 @@ from torch.nn import functional as F
 from torch.optim import Adam
 from torchmetrics.functional import accuracy
 import wandb
+from datetime import datetime
 
 
 if not torch.cuda.is_available():
     print("CUDA not available...")
+
+now_ = datetime.now().isoformat()[:-7]
+wandb_logger = WandbLogger(log_model="all")
+wandb.define_metric("val_accuracy", summary="max")
 
 
 class My_LitModule(LightningModule):
@@ -58,14 +63,28 @@ class My_LitModule(LightningModule):
 
     def validation_step(self, batch, batch_idx):
         """used for logging metrics"""
-        if trainer.global_step == 0:
-            wandb.define_metric("val_accuracy", summary="max")
         preds, loss, acc = self._get_preds_loss_accuracy(batch)
 
         # Log loss and metric
         self.log("val_loss", loss)
         self.log("val_accuracy", acc)
         return preds
+
+    def test_step(self, batch, batch_idx):
+        """used for logging metrics"""
+        preds, loss, acc = self._get_preds_loss_accuracy(batch)
+
+        # Log loss and metric
+        self.log("test_loss", loss)
+        self.log("test_accuracy", acc)
+        return preds
+
+    def test_epoch_end(self, outputs):
+        # shape: batch_size, channels, width, height
+        dummy_input = torch.zeros((1, 1, 28, 28), device=self.device)
+        file_name = f"artifacts/models/{now_}/model.onnx"
+        torch.onnx.export(self, dummy_input, file_name)
+        wandb.save(file_name)
 
     def configure_optimizers(self):
         """defines model optimizer"""
@@ -79,9 +98,6 @@ class My_LitModule(LightningModule):
         loss = self.loss(logits, y)
         acc = accuracy(preds, y)
         return preds, loss, acc
-
-
-wandb_logger = WandbLogger(log_model="all")
 
 
 class LogPredictionSamplesCallback(Callback):
@@ -167,18 +183,20 @@ class MNISTDataModule(LightningDataModule):
         return DataLoader(self.mnist_predict, batch_size=self.batch_size)
 
 
-checkpoint_callback = ModelCheckpoint(monitor="val_accuracy", mode="max")
+checkpoint_callback = ModelCheckpoint(
+    monitor="val_accuracy", mode="max",
+    dirpath=f"artifacts/models/{now_}")
 trainer = Trainer(
-    max_epochs=10,
+    max_epochs=1,
     logger=wandb_logger,
-    # gpus=1,
     callbacks=[
         checkpoint_callback, LogPredictionSamplesCallback()]
 )
 model = My_LitModule()
+dm = MNISTDataModule()
 
-
-trainer.fit(model, datamodule=MNISTDataModule())
+trainer.fit(model, datamodule=dm)
+trainer.test(datamodule=dm)  # use best trained model
 
 # # reference can be retrieved in artifacts panel
 # # "VERSION" can be a version (ex: "v2") or an alias ("latest or "best")

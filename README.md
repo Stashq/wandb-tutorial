@@ -82,7 +82,7 @@ In UI you can create panels using collected data, images, comparing models perfo
 
 *Weaves* are queries defining what data you want collect and how to present it:
 
-```console
+```python
 runs.summary["accuracy"]
 ```
 
@@ -91,6 +91,14 @@ runs.summary["accuracy"]
 [NLP attention](https://wandb.ai/kylegoyette/gradientsandtranslation2/reports/Visualizing-NLP-Attention-Based-Models-Using-Custom-Charts--VmlldzoyNjg2MjM) visualized. [Other useful examples](https://docs.wandb.ai/guides/data-vis/tables) like image classification, NER, ect.  
 
 W&B charts are created with [Vega](https://vega.github.io/vega/). You can customize them in your code but most important you are able to create these in UI adding *custom chart*. On the right will be described query structure which using you change the plot.  
+
+Tables can be transformed in UI (filtering, grouping and many more) using Weave expressions. You can group records by values from certain column clicking on it or filter those examples where predicted and true label were different:
+
+```python
+row["pred"] != row["true"]
+```
+
+After clicking on *Columns* (bottom of Table on right side) you can select which columns to show.
 
 ## API
 
@@ -156,4 +164,29 @@ With wandb reports you can create amazing documents containing latext formula, e
 
 ## Versioning
 
-WandB Artifacts allows you to store and version data and models.
+WandB Artifacts allows you to store and version data and models. Example of logging dataset:
+
+```python
+artifact = wandb.Artifact('mnist', type='dataset')
+artifact.add_dir('mnist/')
+wandb.log_artifact(artifact)
+```
+
+## DL logging
+
+Logging models and metrics:
+
+```python
+wandb_logger = WandbLogger(log_model="all")
+trainer = Trainer(
+    logger=wandb_logger, callbacks=[checkpoint_callback])
+```
+
+Logging onnx model representation:
+
+```python
+dummy_input = torch.zeros(input_shape, device=self.device)
+file_name = f"path/to/model.onnx"
+torch.onnx.export(self, dummy_input, file_name)
+wandb.save(file_name)
+```
