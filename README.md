@@ -88,7 +88,7 @@ runs.summary["accuracy"]
 
 *Embedding Projector* allows you to plot 2d embedding using PCA, t-SNE, UMAP only using UI.  
 
-[NLP attention](https://wandb.ai/kylegoyette/gradientsandtranslation2/reports/Visualizing-NLP-Attention-Based-Models-Using-Custom-Charts--VmlldzoyNjg2MjM) visualized. [Other useful examples](https://docs.wandb.ai/guides/data-vis/tables) like image classification, NER, ect.    
+[NLP attention](https://wandb.ai/kylegoyette/gradientsandtranslation2/reports/Visualizing-NLP-Attention-Based-Models-Using-Custom-Charts--VmlldzoyNjg2MjM) visualized. [Other useful examples](https://docs.wandb.ai/guides/data-vis/tables) like image classification, NER, ect.  
 
 W&B charts are created with [Vega](https://vega.github.io/vega/). You can customize them in your code but most important you are able to create these in UI adding *custom chart*. On the right will be described query structure which using you change the plot.  
 
