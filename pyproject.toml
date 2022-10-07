@@ -14,6 +14,7 @@ seaborn = "^0.12.0"
 plotly = "^5.10.0"
 scikit-learn = "^1.1.2"
 pytorch-lightning = "^1.7.7"
+torchvision = "^0.13.1"
 
 [tool.poetry.dev-dependencies]
 black = "^22.8.0"

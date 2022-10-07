@@ -163,3 +163,4 @@ wandb/
 media/
 plots/
 data/
+lightning_logs/

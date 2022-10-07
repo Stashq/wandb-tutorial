@@ -1,5 +1,7 @@
-import numpy as np
 import random
+
+import numpy as np
+
 import wandb
 
 
@@ -46,19 +48,18 @@ def main():
 
 # 🐝 Step 2: Define sweep config
 sweep_configuration = {
-    'method': 'random',
-    'name': 'sweep',
-    'metric': {'goal': 'maximize', 'name': 'val_acc'},
-    'parameters':
-    {
-        'batch_size': {'values': [16, 32, 64]},
-        'epochs': {'values': [5, 10, 15]},
-        'lr': {'max': 0.1, 'min': 0.0001}
-     }
+    "method": "random",
+    "name": "sweep",
+    "metric": {"goal": "maximize", "name": "val_acc"},
+    "parameters": {
+        "batch_size": {"values": [16, 32, 64]},
+        "epochs": {"values": [5, 10, 15]},
+        "lr": {"max": 0.1, "min": 0.0001},
+    },
 }
 
 # 🐝 Step 3: Initialize sweep by passing in config
-sweep_id = wandb.sweep(sweep=sweep_configuration, project='my-first-sweep')
+sweep_id = wandb.sweep(sweep=sweep_configuration, project="my-first-sweep")
 
 # 🐝 Step 4: Call to `wandb.agent` to start a sweep
 wandb.agent(sweep_id, function=main, count=4)
