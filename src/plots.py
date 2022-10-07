@@ -26,7 +26,7 @@ run = wandb.init(project="log-plotly-fig-tables", name="plotly_html")
 table = wandb.Table(columns=["plotly_figure"])
 
 # Create path for Plotly figure
-path_to_plotly_html = "plots/plotly_figure.html"
+path_to_plotly_html = "artifacts/plots/plotly_figure_example.html"
 
 # Example Plotly figure
 fig = px.scatter(x=[0, 1, 2, 3, 4], y=[0, 1, 4, 9, 16])
