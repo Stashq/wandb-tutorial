@@ -76,6 +76,22 @@ By default W&B takes last value of metric as its summarization. You can set othe
 wandb.define_metric("loss", summary="min")
 ```
 
+## Vizualizations
+
+In UI you can create panels using collected data, images, comparing models performance with *parallel coordinates plot* and many more.  
+
+*Weaves* are queries defining what data you want collect and how to present it:
+
+```console
+runs.summary["accuracy"]
+```
+
+*Embedding Projector* allows you to plot 2d embedding using PCA, t-SNE, UMAP only using UI.  
+
+[NLP attention](https://wandb.ai/kylegoyette/gradientsandtranslation2/reports/Visualizing-NLP-Attention-Based-Models-Using-Custom-Charts--VmlldzoyNjg2MjM) visualized. [Other useful examples](https://docs.wandb.ai/guides/data-vis/tables) like image classification, NER, ect.    
+
+W&B charts are created with [Vega](https://vega.github.io/vega/). You can customize them in your code but most important you are able to create these in UI adding *custom chart*. On the right will be described query structure which using you change the plot.  
+
 ## API
 
 You can go back to previous runs and take artifacts from them:
