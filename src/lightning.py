@@ -26,8 +26,6 @@ class My_LitModule(LightningModule):
         """method used to define our model parameters"""
         super().__init__()
 
-        self.save_hyperparameters()
-
         # mnist images are (1, 28, 28) (channels, width, height)
         self.layer_1 = Linear(28 * 28, n_layer_1)
         self.layer_2 = Linear(n_layer_1, n_layer_2)
@@ -38,6 +36,13 @@ class My_LitModule(LightningModule):
 
         # save hyper-parameters to self.hparams (auto-logged by W&B)
         self.save_hyperparameters()
+
+        # watch gradient
+        wandb.watch(
+            self,
+            log="gradients",
+            log_freq=1000
+        )
 
     def forward(self, x):
         """method used for inference input -> output"""

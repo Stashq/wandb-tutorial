@@ -190,3 +190,13 @@ file_name = f"path/to/model.onnx"
 torch.onnx.export(self, dummy_input, file_name)
 wandb.save(file_name)
 ```
+
+To log gradient you have to use:
+
+```python
+wandb.watch(
+    model,
+    log="gradients",
+    log_freq=1000
+)
+```
