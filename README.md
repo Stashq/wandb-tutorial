@@ -200,3 +200,15 @@ wandb.watch(
     log_freq=1000
 )
 ```
+
+## Additional notes
+
+To deal with `ModuleNotFoundError: No module named 'src'` add to `pyproject.toml`:
+
+```toml
+[tool.poetry]
+...
+packages = [
+    { include = "src" },
+]
+```
