@@ -1,12 +1,12 @@
-from torchvision.datasets import MNIST
-from torchvision import transforms
 import torch
-from torch.utils.data import DataLoader, random_split
-from pytorch_lightning import LightningModule, LightningDataModule
+from pytorch_lightning import LightningDataModule, LightningModule
 from torch.nn import CrossEntropyLoss, Linear
 from torch.nn import functional as F
 from torch.optim import Adam
+from torch.utils.data import DataLoader, random_split
 from torchmetrics.functional import accuracy
+from torchvision import transforms
+from torchvision.datasets import MNIST
 import wandb
 
 
@@ -27,11 +27,7 @@ class My_LitModule(LightningModule):
         self.save_hyperparameters()
 
         # watch gradient
-        wandb.watch(
-            self,
-            log="gradients",
-            log_freq=1000
-        )
+        wandb.watch(self, log="gradients", log_freq=1000)
 
     def forward(self, x):
         """method used for inference input -> output"""

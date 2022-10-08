@@ -1,11 +1,10 @@
 import torch
 from pytorch_lightning import Trainer
+from pytorch_lightning.callbacks import Callback, ModelCheckpoint
 from pytorch_lightning.loggers import WandbLogger
-from pytorch_lightning.callbacks import ModelCheckpoint, Callback
+
 import wandb
-
-from src.pl_mnist_model import My_LitModule, MNISTDataModule
-
+from src.pl_mnist_model import MNISTDataModule, My_LitModule
 
 if not torch.cuda.is_available():
     print("CUDA not available...")
@@ -50,13 +49,12 @@ class LogPredictionSamplesCallback(Callback):
 
 
 checkpoint_callback = ModelCheckpoint(
-    monitor="val_accuracy", mode="max",
-    dirpath="artifacts/models")
+    monitor="val_accuracy", mode="max", dirpath="artifacts/models"
+)
 trainer = Trainer(
     max_epochs=1,
     logger=wandb_logger,
-    callbacks=[
-        checkpoint_callback, LogPredictionSamplesCallback()]
+    callbacks=[checkpoint_callback, LogPredictionSamplesCallback()],
 )
 model = My_LitModule()
 dm = MNISTDataModule()
